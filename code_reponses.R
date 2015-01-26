@@ -11,15 +11,6 @@ w <- read.spss(paste(wd,"01-weights.sav", sep = '/'), to.data.frame = TRUE)
 names(w)
 str(w)
 
-library(foreign)
-
-wd = "C:/Users/SexyManatee/Desktop/PhD/Cogmaster/r-cogstats/projects"
-
-
-w <- read.spss(paste(wd,"01-weights.sav", sep = '/'), to.data.frame = TRUE)
-names(w)
-str(w)
-
 
 # Q1
 
