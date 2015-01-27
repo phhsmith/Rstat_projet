@@ -127,12 +127,12 @@ splom(~w[2:4])
 scatter.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
 loess.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
 
-lw1 <- loess(LENGTH ~ WEIGHT,data=w)
-plot(LENGTH ~ WEIGHT, data=w)
-j <- order(w$WEIGHT)
-lines(w$WEIGHT[j],lw1$fitted[j],col="red",lwd=3)
+lw1 <- loess(WEIGHT ~ LENGTH,data=w)
+plot(WEIGHT ~ LENGTH, data=w)
+j <- order(w$LENGTH)
+lines(w$LENGTH[j],lw1$fitted[j],col="red",lwd=3)
 
-#fitting a linear model to confirm
+#fitting a linear model
 WL.lm = lm(WEIGHT ~ LENGTH, data=w)
 WL.res = resid(WL.lm)
 plot(w$LENGTH, WL.res, ylab = "Residuals", xlab = "Length", main = "Linear Model") 
@@ -141,3 +141,13 @@ abline(0, 0)
 
 
 #b regression coefficient table
+##pas sure du tout du sens de la question. Ils veulent tous les types de coefficient de régression?
+
+
+##c 95% confidence interval on slope parameters
+
+##d R² du modèle
+
+##e weight for a 56,8 cm baby
+predict(lw1,56.8)
+#result = 4,7474kg
