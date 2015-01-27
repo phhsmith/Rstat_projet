@@ -3,8 +3,8 @@ library(lattice)
 library(psych)
 
 # ici il faudra changer ton wd pour le dossier qui contient  "01_weights.sav"
-#wd = "C:/Users/SexyManatee/Desktop/PhD/Cogmaster/r-cogstats/projects" 
-wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+#wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
 
 
 # lecture du fichier et importation du data.frame
