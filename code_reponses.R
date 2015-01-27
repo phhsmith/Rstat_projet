@@ -123,7 +123,7 @@ splom(~w[2:4])
 
 
 ### Q6 
-#a body length/weight scatterplot with loess smoother
+#a# body length/weight scatterplot with loess smoother
 scatter.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
 loess.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
 
@@ -140,14 +140,42 @@ abline(0, 0)
 #no obvious non-linearity, but loess model is not a completely straight line
 
 
-#b regression coefficient table
+#b# regression coefficient table
 ##pas sure du tout du sens de la question. Ils veulent tous les types de coefficient de régression?
 
 
-##c 95% confidence interval on slope parameters
 
-##d R² du modèle
 
-##e weight for a 56,8 cm baby
+#c# 95% confidence interval on slope parameters
+#linear model
+#model plot
+plot(w$WEIGHT~w$LENGTH) 
+abline(lm(WEIGHT ~ LENGTH, w))
+#slope estimate
+coef(WL.lm)
+#95% confidence interval for slope
+confint(lw1,level=0.95)
+
+
+
+#d# R² du modèle
+#linear model
+summary(WL.lm)$r.squared
+#result: adjusted R-squared = 0.5085
+
+#loess model: no real R², but pseudo R² can be calculated
+ss.dist <- sum(scale(w$WEIGHT, scale=FALSE)^2)
+ss.resid <- sum(resid(lw1)^2)
+1-ss.resid/ss.dist
+#result: R² = 0.5121
+
+
+#e# weight for a 56,8 cm baby
+#loess
 predict(lw1,56.8)
 #result = 4,7474kg
+
+#linear
+predict(WL.lm, data.frame(LENGTH = 56.8), interval = "confidence", level = 0.95)
+#result = 4,7157 kg, 95% confidence interval = 4,6701 - 4,7614
+
