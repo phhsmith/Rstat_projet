@@ -1,8 +1,11 @@
 library(foreign)
-
+library(lattice)
+library(psych)
 
 # ici il faudra changer ton wd pour le dossier qui contient  "01_weights.sav"
-wd = "C:/Users/SexyManatee/Desktop/PhD/Cogmaster/r-cogstats/projects" 
+#wd = "C:/Users/SexyManatee/Desktop/PhD/Cogmaster/r-cogstats/projects" 
+wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+
 
 # lecture du fichier et importation du data.frame
 w <- read.spss(paste(wd,"01-weights.sav", sep = '/'), to.data.frame = TRUE)
@@ -23,7 +26,7 @@ func_count = function(x, digits = 1)
   round(length(x), digits = digits)
 
 d_count = aggregate(w$GENDER ~ PARITY, data = w, func_count)
-names(d_freq) = c("PARITY", "COUNT")
+names(d_count) = c("PARITY", "COUNT")
 
 #frequencies
 func_freq = function(x, digits = 1)
@@ -39,6 +42,10 @@ func_weight = function(x, digits = 1)
 
 d_weight = aggregate(WEIGHT ~ PARITY, data = w, func_weight)
 # je ne sais pas changer les headers pour range: d_weight indique range1 et range2 quand je voudrais mettre range_min et range_max...
+#la structure de d_weight est bizarre, je le change en matrix puis en data.frame de nouveau pour donner le même statut à toutes les colonnes (c'est certes de la cuisine)
+d_weight = as.data.frame(as.matrix(d_weight))
+names(d_weight)[4:5] = c("range_min","range_max")
+
 
 # plots
 
@@ -100,3 +107,37 @@ summary(m)$r.squared
 # 0.01734983
 # mauvais RÂ² ==> corrÃ©lation faible...
 
+
+### Q5
+# a
+#pearson significance matrix and two-tailed significance test w/o Bonferroni 
+corr.test(as.matrix(w[2:4],adjust="none"))
+
+#with Bonferroni
+corr.test(as.matrix(w[2:4],adjust="Bonferroni"))
+
+###dans les deux cas, toutes les p-values valent 0... C'est cohérent avec les valeurs de cor.test mais ça parait bizarre
+
+# b scatterplot of pairwise Pearson correlation between baby weight, height, and head circumference
+splom(~w[2:4])
+
+
+### Q6 
+#a body length/weight scatterplot with loess smoother
+scatter.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
+loess.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
+
+lw1 <- loess(LENGTH ~ WEIGHT,data=w)
+plot(LENGTH ~ WEIGHT, data=w)
+j <- order(w$WEIGHT)
+lines(w$WEIGHT[j],lw1$fitted[j],col="red",lwd=3)
+
+#fitting a linear model to confirm
+WL.lm = lm(WEIGHT ~ LENGTH, data=w)
+WL.res = resid(WL.lm)
+plot(w$LENGTH, WL.res, ylab = "Residuals", xlab = "Length", main = "Linear Model") 
+abline(0, 0)
+#no obvious non-linearity, but loess model is not a completely straight line
+
+
+#b regression coefficient table
