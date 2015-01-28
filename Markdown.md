@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 Project 1 AS 2014-2015: birthweight as fuction of parity
 ==============================================================================
   
@@ -23,7 +26,9 @@ browseURL("Markdown.html")
 library(foreign)
 library(lattice)
 library(psych)
-wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+# wd = 'C:/Users/SexyManatee/Documents/GitHub/Rstat_projet'
+wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+
 w <- read.spss(paste(wd, "01-weights.sav", sep = "/"), to.data.frame = TRUE)
 names(w)
 str(w)
@@ -67,8 +72,8 @@ countfreq_summary = data.frame(d_count, d_freq[2])
 print(xtable(countfreq_summary), type = "html", include.rownames = TRUE)
 ```
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-<!-- Tue Jan 27 16:14:17 2015 -->
+<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
+<!-- Wed Jan 28 00:58:26 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> COUNT </th> <th> FREQUENCY </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> Singleton </td> <td align="right"> 180.00 </td> <td align="right"> 0.30 </td> </tr>
@@ -103,8 +108,8 @@ Printing table for baby weights:
 print(xtable(d_weight), type = "html", include.rownames = TRUE)
 ```
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-<!-- Tue Jan 27 16:14:17 2015 -->
+<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
+<!-- Wed Jan 28 00:58:26 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> MEAN </th> <th> STAND DEV </th> <th> RANGE MIN </th> <th> RANGE MAX </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> Singleton </td> <td> 4.3 </td> <td> 0.6 </td> <td> 2.9 </td> <td> 5.8 </td> </tr>
@@ -156,7 +161,7 @@ The part of the variance explained here is about 1.8%.
 <ul>
 **<li><p>Independance</p>**
 <p>The sample includes less than 10% of the population and no obvious links are reported between the children. We can assume that the samples are independant.</p></li>
-<li><p>**Approximately normal**</p>
+**<li><p>Approximately normal</p>**
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -168,7 +173,7 @@ qqnorm(w$WEIGHT)
 It looks like a roughly linear function relates our sample distribution and the normal distribution, thus we can conclude that the sample distribution is approximately normal.
 
 <ul>
-<li>**Constant variance**</li>
+**<li>Constant variance</li>**
 </ul>
 
 ```r
@@ -218,9 +223,9 @@ print(part_explained_2, type = "html", include.rownames = FALSE)
 The part of the variance explained here is still about 1.8%.
 ### Assumptions
 <ul>
-<li><p>**Independance**</p>
+**<li><p>Independance</p>**
 <p>No changes in this assumption</p></li>
-<li><p>**Approximately normal**</p>
+**<li><p>Approximately normal</p>**
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -231,7 +236,7 @@ qqnorm(w$WEIGHT)
 <img src="figure/qqnorm-1.png" title="plot of chunk qqnorm" alt="plot of chunk qqnorm" style="display: block; margin: auto;" />
 No changes in this assumption
 <ul>
-<li>**Constant variance**</li>
+**<li>Constant variance</li>**
 </ul>
 
 ```r
@@ -241,7 +246,7 @@ bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 <img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" />
 According to what can be observed here and the data constained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
 
-<h> Question 4 </h>
+<h1> Question 4 </h1>
 
 ### Linear regression
 
@@ -284,3 +289,171 @@ print(summary(m)$r.squared, type = "html", include.rownames = FALSE)
 ## [1] 0.01734983
 ```
 R-squared is close to 0, we can conclude that the correlation is low, even if present.
+
+
+<h1> Question 5 </h1>
+
+### Pairwise Pearson correlation
+Correlations between baby weight, height, and head circumference, with Bonferroni correction:
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "Bonferroni"))$r
+```
+
+```
+##           WEIGHT    LENGTH     HEADC
+## WEIGHT 1.0000000 0.7131192 0.6224651
+## LENGTH 0.7131192 1.0000000 0.5982714
+## HEADC  0.6224651 0.5982714 1.0000000
+```
+Value of t-tests for each correlation and associated p-values:
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "Bonferroni"))$t
+```
+
+```
+##          WEIGHT   LENGTH    HEADC
+## WEIGHT      Inf 23.81266 18.61826
+## LENGTH 23.81266      Inf 17.47821
+## HEADC  18.61826 17.47821      Inf
+```
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "Bonferroni"))$p
+```
+
+```
+##        WEIGHT LENGTH HEADC
+## WEIGHT      0      0     0
+## LENGTH      0      0     0
+## HEADC       0      0     0
+```
+
+Correlations between baby weight, height, and head circumference, without Bonferroni correction:
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "none"))$r
+```
+
+```
+##           WEIGHT    LENGTH     HEADC
+## WEIGHT 1.0000000 0.7131192 0.6224651
+## LENGTH 0.7131192 1.0000000 0.5982714
+## HEADC  0.6224651 0.5982714 1.0000000
+```
+Value of t-tests for each correlation and associated p-values:
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "none"))$t
+```
+
+```
+##          WEIGHT   LENGTH    HEADC
+## WEIGHT      Inf 23.81266 18.61826
+## LENGTH 23.81266      Inf 17.47821
+## HEADC  18.61826 17.47821      Inf
+```
+
+```r
+corr.test(as.matrix(w[2:4], adjust = "none"))$p
+```
+
+```
+##        WEIGHT LENGTH HEADC
+## WEIGHT      0      0     0
+## LENGTH      0      0     0
+## HEADC       0      0     0
+```
+
+
+### Scatterplot matrix of pairwise relationships
+
+```r
+splom(~w[2:4])
+```
+
+<img src="figure/scatt_matrix-1.png" title="plot of chunk scatt_matrix" alt="plot of chunk scatt_matrix" style="display: block; margin: auto;" />
+
+<h1> Question 6 </h1>
+### Relationship between body length and weight, with a loess smoother
+
+```r
+lw1 <- loess(WEIGHT ~ LENGTH, data = w)
+plot(WEIGHT ~ LENGTH, data = w)
+j <- order(w$LENGTH)
+lines(w$LENGTH[j], lw1$fitted[j], col = "red", lwd = 3)
+```
+
+<img src="figure/loess_smoother-1.png" title="plot of chunk loess_smoother" alt="plot of chunk loess_smoother" style="display: block; margin: auto;" />
+The loess regression is not strictly a straight line, there seem to be some local non-linearities especially around low values.
+Is a linear model then a good approximation for this set of data?
+
+
+```r
+WL.lm = lm(WEIGHT ~ LENGTH, data = w)
+WL.res = resid(WL.lm)
+plot(w$LENGTH, WL.res, ylab = "Residuals", xlab = "Fitted Values", main = "Linear Model Fitting")
+abline(0, 0)
+```
+
+<img src="figure/linear_model-1.png" title="plot of chunk linear_model" alt="plot of chunk linear_model" style="display: block; margin: auto;" />
+These residuals appear to indicate that a linear model is accurate in this case, and this is coherent with the high significance of correlation coefficients computed in Question 5.
+We will thus rely on this linear model for the rest of our analysis.
+
+### Table of regression coefficients from the linear model
+
+```r
+as.table(WL.lm$coefficients)
+```
+
+```
+## (Intercept)      LENGTH 
+##  -5.4121446   0.1783078
+```
+
+### 95% confidence intervals for the slope parameter
+
+```r
+confint(WL.lm, "LENGTH", level = 0.95)
+```
+
+```
+##            2.5 %    97.5 %
+## LENGTH 0.1635992 0.1930164
+```
+
+### R-squared value for the linear model
+
+```r
+summary(WL.lm)$r.squared
+```
+
+```
+## [1] 0.508539
+```
+A pseudo R-squared can also be calculated for the loess regression.
+
+```r
+ss.dist <- sum(scale(w$WEIGHT, scale = FALSE)^2)
+ss.resid <- sum(resid(lw1)^2)
+1 - ss.resid/ss.dist
+```
+
+```
+## [1] 0.512096
+```
+
+### Weight prediction for a height of 56.8 cm
+
+```r
+predict(WL.lm, data.frame(LENGTH = 56.8), interval = "confidence", level = 0.95)
+```
+
+```
+##        fit      lwr      upr
+## 1 4.715739 4.670117 4.761361
+```
+According to our linear model, a 56.8 cm tall baby would have a weight of 4716 grams, with a 95% confidence interval of 4670 grams to 4761 grams.
+
+We can conclude that body length is a useful predictor for weight at 1 month of age, as these variables are very significantly correlated, and body length allows for a narrow prediction of body weight.

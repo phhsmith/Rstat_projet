@@ -125,7 +125,6 @@ splom(~w[2:4])
 ### Q6 
 #a# body length/weight scatterplot with loess smoother
 scatter.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
-loess.smooth(w$LENGTH,w$WEIGHT, xlab = "LENGTH", ylab = "WEIGHT")
 
 lw1 <- loess(WEIGHT ~ LENGTH,data=w)
 plot(WEIGHT ~ LENGTH, data=w)
@@ -141,21 +140,11 @@ abline(0, 0)
 
 
 #b# regression coefficient table
-##pas sure du tout du sens de la question. Ils veulent tous les types de coefficient de régression?
-
-
+as.table(WL.lm$coefficients)
 
 
 #c# 95% confidence interval on slope parameters
-#linear model
-#model plot
-plot(w$WEIGHT~w$LENGTH) 
-abline(lm(WEIGHT ~ LENGTH, w))
-#slope estimate
-coef(WL.lm)
-#95% confidence interval for slope
-confint(lw1,level=0.95)
-
+confint(WL.lm,'LENGTH',level=0.95)
 
 
 #d# R² du modèle

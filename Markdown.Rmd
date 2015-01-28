@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 Project 1 AS 2014-2015: birthweight as fuction of parity
 ==============================================================================
   
@@ -25,7 +28,9 @@ browseURL("Markdown.html")
 library(foreign)
 library(lattice)
 library(psych)
-wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+#wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+
 w <- read.spss(paste(wd, "01-weights.sav", sep="/"), to.data.frame=TRUE)
 names(w)
 str(w)
@@ -184,7 +189,7 @@ bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 ```
 According to what can be observed here and the data constained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
 
-<h> Question 4 </h>
+<h1> Question 4 </h1>
 
 ### Linear regression
 ```{r}
@@ -199,3 +204,82 @@ p < 0.01: we reject the null hypothesis and conclude that there is a linear corr
 print(summary(m)$r.squared, type = "html", include.rownames = FALSE)
 ```
 R-squared is close to 0, we can conclude that the correlation is low, even if present.
+
+
+<h1> Question 5 </h1>
+
+### Pairwise Pearson correlation
+Correlations between baby weight, height, and head circumference, with Bonferroni correction:
+```{r Bonf_corr}
+corr.test(as.matrix(w[2:4],adjust="Bonferroni"))$r
+```
+Value of t-tests for each correlation and associated p-values:
+```{r Bonf_tests}
+corr.test(as.matrix(w[2:4],adjust="Bonferroni"))$t
+corr.test(as.matrix(w[2:4],adjust="Bonferroni"))$p
+```
+
+Correlations between baby weight, height, and head circumference, without Bonferroni correction:
+```{r nonBonf_corr}
+corr.test(as.matrix(w[2:4],adjust="none"))$r
+```
+Value of t-tests for each correlation and associated p-values:
+```{r nonBonf_tests}
+corr.test(as.matrix(w[2:4],adjust="none"))$t
+corr.test(as.matrix(w[2:4],adjust="none"))$p
+```
+
+
+### Scatterplot matrix of pairwise relationships
+```{r scatt_matrix}
+splom(~w[2:4])
+```
+
+<h1> Question 6 </h1>
+### Relationship between body length and weight, with a loess smoother
+```{r loess_smoother}
+lw1 <- loess(WEIGHT ~ LENGTH,data=w)
+plot(WEIGHT ~ LENGTH, data=w)
+j <- order(w$LENGTH)
+lines(w$LENGTH[j],lw1$fitted[j],col="red",lwd=3)
+```
+The loess regression is not strictly a straight line, there seem to be some local non-linearities especially around low values.
+Is a linear model then a good approximation for this set of data?
+
+```{r linear_model}
+WL.lm = lm(WEIGHT ~ LENGTH, data=w)
+WL.res = resid(WL.lm)
+plot(w$LENGTH, WL.res, ylab = "Residuals", xlab = "Fitted Values", main = "Linear Model Fitting") 
+abline(0, 0)
+```
+These residuals appear to indicate that a linear model is accurate in this case, and this is coherent with the high significance of correlation coefficients computed in Question 5.
+We will thus rely on this linear model for the rest of our analysis.
+
+### Table of regression coefficients from the linear model
+```{r regression_coeff}
+as.table(WL.lm$coefficients)
+```
+
+### 95% confidence intervals for the slope parameter
+```{r 95_slope}
+confint(WL.lm,'LENGTH',level=0.95)
+```
+
+### R-squared value for the linear model
+```{r R-squared_linear}
+summary(WL.lm)$r.squared
+```
+A pseudo R-squared can also be calculated for the loess regression.
+```{r R-squared_loess}
+ss.dist <- sum(scale(w$WEIGHT, scale=FALSE)^2)
+ss.resid <- sum(resid(lw1)^2)
+1-ss.resid/ss.dist
+```
+
+### Weight prediction for a height of 56.8 cm
+```{r weight_prediction}
+predict(WL.lm, data.frame(LENGTH = 56.8), interval = "confidence", level = 0.95)
+```
+According to our linear model, a 56.8 cm tall baby would have a weight of 4716 grams, with a 95% confidence interval of 4670 grams to 4761 grams.
+
+We can conclude that body length is a useful predictor for weight at 1 month of age, as these variables are very significantly correlated, and body length allows for a narrow prediction of body weight.
