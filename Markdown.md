@@ -1,7 +1,7 @@
 ---
-output: html_document
+output: pdf_document
 ---
-Project 1 AS 2014-2015: birthweight as fuction of parity
+Project 1 AS 2014-2015: birthweight as fuction of parity and body length
 ==============================================================================
   
   <big>
@@ -26,8 +26,8 @@ browseURL("Markdown.html")
 library(foreign)
 library(lattice)
 library(psych)
-# wd = 'C:/Users/SexyManatee/Documents/GitHub/Rstat_projet'
-wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+# wd = 'D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R'
 
 w <- read.spss(paste(wd, "01-weights.sav", sep = "/"), to.data.frame = TRUE)
 names(w)
@@ -72,8 +72,8 @@ countfreq_summary = data.frame(d_count, d_freq[2])
 print(xtable(countfreq_summary), type = "html", include.rownames = TRUE)
 ```
 
-<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Wed Jan 28 00:58:26 2015 -->
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<!-- Wed Jan 28 11:57:35 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> COUNT </th> <th> FREQUENCY </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> Singleton </td> <td align="right"> 180.00 </td> <td align="right"> 0.30 </td> </tr>
@@ -108,8 +108,8 @@ Printing table for baby weights:
 print(xtable(d_weight), type = "html", include.rownames = TRUE)
 ```
 
-<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Wed Jan 28 00:58:26 2015 -->
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<!-- Wed Jan 28 11:57:35 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> MEAN </th> <th> STAND DEV </th> <th> RANGE MIN </th> <th> RANGE MAX </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> Singleton </td> <td> 4.3 </td> <td> 0.6 </td> <td> 2.9 </td> <td> 5.8 </td> </tr>
@@ -159,9 +159,9 @@ print(part_explained, type = "html", include.rownames = FALSE)
 The part of the variance explained here is about 1.8%. 
 ### Assumptions
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>The sample includes less than 10% of the population and no obvious links are reported between the children. We can assume that the samples are independant.</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -173,7 +173,7 @@ qqnorm(w$WEIGHT)
 It looks like a roughly linear function relates our sample distribution and the normal distribution, thus we can conclude that the sample distribution is approximately normal.
 
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
 
 ```r
@@ -181,7 +181,7 @@ bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 ```
 
 <img src="figure/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" style="display: block; margin: auto;" />
-According to what can be observed hereand the data constained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though "3 or more siblings" is slightly off.
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though "3 or more siblings" is slightly off.
 
 <h1> Question 3 </h1>
 
@@ -223,9 +223,9 @@ print(part_explained_2, type = "html", include.rownames = FALSE)
 The part of the variance explained here is still about 1.8%.
 ### Assumptions
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>No changes in this assumption</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -236,15 +236,15 @@ qqnorm(w$WEIGHT)
 <img src="figure/qqnorm-1.png" title="plot of chunk qqnorm" alt="plot of chunk qqnorm" style="display: block; margin: auto;" />
 No changes in this assumption
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
 
 ```r
 bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 ```
 
-<img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" />
-According to what can be observed here and the data constained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
+<img src="figure/boxplot_3levels-1.png" title="plot of chunk boxplot_3levels" alt="plot of chunk boxplot_3levels" style="display: block; margin: auto;" />
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
 
 <h1> Question 4 </h1>
 
@@ -329,6 +329,8 @@ corr.test(as.matrix(w[2:4], adjust = "Bonferroni"))$p
 ## LENGTH      0      0     0
 ## HEADC       0      0     0
 ```
+The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.
+
 
 Correlations between baby weight, height, and head circumference, without Bonferroni correction:
 
@@ -365,7 +367,7 @@ corr.test(as.matrix(w[2:4], adjust = "none"))$p
 ## LENGTH      0      0     0
 ## HEADC       0      0     0
 ```
-
+The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.
 
 ### Scatterplot matrix of pairwise relationships
 
@@ -374,7 +376,7 @@ splom(~w[2:4])
 ```
 
 <img src="figure/scatt_matrix-1.png" title="plot of chunk scatt_matrix" alt="plot of chunk scatt_matrix" style="display: block; margin: auto;" />
-
+There seems to be a strong, positive correlation between all variables.
 <h1> Question 6 </h1>
 ### Relationship between body length and weight, with a loess smoother
 
@@ -404,12 +406,23 @@ We will thus rely on this linear model for the rest of our analysis.
 ### Table of regression coefficients from the linear model
 
 ```r
-as.table(WL.lm$coefficients)
+print(xtable(as.table(WL.lm$coefficients), type = "html", include.rownames = FALSE))
 ```
 
 ```
-## (Intercept)      LENGTH 
-##  -5.4121446   0.1783078
+## % latex table generated in R 3.1.1 by xtable 1.7-4 package
+## % Wed Jan 28 11:57:36 2015
+## \begin{table}[ht]
+## \centering
+## \begin{tabular}{rr}
+##   \hline
+##  & x \\ 
+##   \hline
+## (Intercept) & -5.41 \\ 
+##   LENGTH & 0.18 \\ 
+##    \hline
+## \end{tabular}
+## \end{table}
 ```
 
 ### 95% confidence intervals for the slope parameter
@@ -443,7 +456,7 @@ ss.resid <- sum(resid(lw1)^2)
 ```
 ## [1] 0.512096
 ```
-
+We have now quantified the strong positive correlation observed in the scatterplot between body length and weight.
 ### Weight prediction for a height of 56.8 cm
 
 ```r

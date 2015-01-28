@@ -205,7 +205,7 @@ hr {
 <div id="toc_header">Table of Contents</div>
 <ul>
 <li>
-<a href="#toc_0">Project 1 AS 2014-2015: birthweight as fuction of parity</a>
+<a href="#toc_0">Project 1 AS 2014-2015: birthweight as fuction of parity and body length</a>
 <ul>
 <li>
 <ul>
@@ -268,7 +268,7 @@ hr {
 </div>
 
 
-<h1 id="toc_0">Project 1 AS 2014-2015: birthweight as fuction of parity</h1>
+<h1 id="toc_0">Project 1 AS 2014-2015: birthweight as fuction of parity and body length</h1>
 
 <p><big>
   <strong>Daphné RIMSKY-ROBERT and Pauline SMITH</strong><br>
@@ -286,8 +286,8 @@ browseURL(&quot;Markdown.html&quot;)</p>
 <pre><code class="r">library(foreign)
 library(lattice)
 library(psych)
-# wd = &#39;C:/Users/SexyManatee/Documents/GitHub/Rstat_projet&#39;
-wd = &quot;D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R&quot;
+wd = &quot;C:/Users/SexyManatee/Documents/GitHub/Rstat_projet&quot;
+# wd = &#39;D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R&#39;
 
 w &lt;- read.spss(paste(wd, &quot;01-weights.sav&quot;, sep = &quot;/&quot;), to.data.frame = TRUE)
 names(w)
@@ -324,9 +324,9 @@ names(d_freq) = c(&quot;PARITY&quot;, &quot;FREQUENCY&quot;)
 print(xtable(countfreq_summary), type = &quot;html&quot;, include.rownames = TRUE)
 </code></pre>
 
-<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
 
-<!-- Wed Jan 28 00:58:26 2015 -->
+<!-- Wed Jan 28 11:57:35 2015 -->
 
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> COUNT </th> <th> FREQUENCY </th>  </tr>
@@ -356,9 +356,9 @@ names(d_weight) = c(&quot;PARITY&quot;, &quot;MEAN&quot;, &quot;STAND DEV&quot;,
 <pre><code class="r">print(xtable(d_weight), type = &quot;html&quot;, include.rownames = TRUE)
 </code></pre>
 
-<!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
 
-<!-- Wed Jan 28 00:58:26 2015 -->
+<!-- Wed Jan 28 11:57:35 2015 -->
 
 <table border=1>
 <tr> <th>  </th> <th> PARITY </th> <th> MEAN </th> <th> STAND DEV </th> <th> RANGE MIN </th> <th> RANGE MAX </th>  </tr>
@@ -407,9 +407,9 @@ The part of the variance explained here is about 1.8%. </p>
 <h3 id="toc_5">Assumptions</h3>
 
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>The sample includes less than 10% of the population and no obvious links are reported between the children. We can assume that the samples are independant.</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -420,14 +420,14 @@ The part of the variance explained here is about 1.8%. </p>
 It looks like a roughly linear function relates our sample distribution and the normal distribution, thus we can conclude that the sample distribution is approximately normal.</p>
 
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
 
 <pre><code class="r">bwplot(PARITY ~ WEIGHT, data = w, pch = &quot;|&quot;)
 </code></pre>
 
 <p><img src="figure/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" style="display: block; margin: auto;" />
-According to what can be observed hereand the data constained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though &quot;3 or more siblings&quot; is slightly off.</p>
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though &quot;3 or more siblings&quot; is slightly off.</p>
 
 <h1> Question 3 </h1>
 
@@ -466,9 +466,9 @@ print(part_explained_2, type = &quot;html&quot;, include.rownames = FALSE)
 <h3 id="toc_9">Assumptions</h3>
 
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>No changes in this assumption</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
 
@@ -479,14 +479,14 @@ print(part_explained_2, type = &quot;html&quot;, include.rownames = FALSE)
 No changes in this assumption</p>
 
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
 
 <pre><code class="r">bwplot(PARITY ~ WEIGHT, data = w, pch = &quot;|&quot;)
 </code></pre>
 
-<p><img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" />
-According to what can be observed here and the data constained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.</p>
+<p><img src="figure/boxplot_3levels-1.png" title="plot of chunk boxplot_3levels" alt="plot of chunk boxplot_3levels" style="display: block; margin: auto;" />
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.</p>
 
 <h1> Question 4 </h1>
 
@@ -564,6 +564,8 @@ print(summary(m), type = &quot;html&quot;, include.rownames = FALSE)
 ## HEADC       0      0     0
 </code></pre>
 
+<p>The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.</p>
+
 <p>Correlations between baby weight, height, and head circumference, without Bonferroni correction:</p>
 
 <pre><code class="r">corr.test(as.matrix(w[2:4], adjust = &quot;none&quot;))$r
@@ -595,12 +597,15 @@ print(summary(m), type = &quot;html&quot;, include.rownames = FALSE)
 ## HEADC       0      0     0
 </code></pre>
 
+<p>The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.</p>
+
 <h3 id="toc_12">Scatterplot matrix of pairwise relationships</h3>
 
 <pre><code class="r">splom(~w[2:4])
 </code></pre>
 
-<p><img src="figure/scatt_matrix-1.png" title="plot of chunk scatt_matrix" alt="plot of chunk scatt_matrix" style="display: block; margin: auto;" /></p>
+<p><img src="figure/scatt_matrix-1.png" title="plot of chunk scatt_matrix" alt="plot of chunk scatt_matrix" style="display: block; margin: auto;" />
+There seems to be a strong, positive correlation between all variables.</p>
 
 <h1> Question 6 </h1>
 
@@ -628,11 +633,22 @@ We will thus rely on this linear model for the rest of our analysis.</p>
 
 <h3 id="toc_14">Table of regression coefficients from the linear model</h3>
 
-<pre><code class="r">as.table(WL.lm$coefficients)
+<pre><code class="r">print(xtable(as.table(WL.lm$coefficients), type = &quot;html&quot;, include.rownames = FALSE))
 </code></pre>
 
-<pre><code>## (Intercept)      LENGTH 
-##  -5.4121446   0.1783078
+<pre><code>## % latex table generated in R 3.1.1 by xtable 1.7-4 package
+## % Wed Jan 28 11:57:36 2015
+## \begin{table}[ht]
+## \centering
+## \begin{tabular}{rr}
+##   \hline
+##  &amp; x \\ 
+##   \hline
+## (Intercept) &amp; -5.41 \\ 
+##   LENGTH &amp; 0.18 \\ 
+##    \hline
+## \end{tabular}
+## \end{table}
 </code></pre>
 
 <h3 id="toc_15">95% confidence intervals for the slope parameter</h3>
@@ -661,6 +677,8 @@ ss.resid &lt;- sum(resid(lw1)^2)
 
 <pre><code>## [1] 0.512096
 </code></pre>
+
+<p>We have now quantified the strong positive correlation observed in the scatterplot between body length and weight.</p>
 
 <h3 id="toc_17">Weight prediction for a height of 56.8 cm</h3>
 

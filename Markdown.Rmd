@@ -1,7 +1,7 @@
 ---
 output: pdf_document
 ---
-Project 1 AS 2014-2015: birthweight as fuction of parity
+Project 1 AS 2014-2015: birthweight as fuction of parity and body length
 ==============================================================================
   
   <big>
@@ -24,12 +24,12 @@ browseURL("Markdown.html")
 
 <h1> Importing data </h1>
 
-```{r load, results='hide'}
+```{r load, echo='false', results='hide'}
 library(foreign)
 library(lattice)
 library(psych)
-#wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
-wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
+wd = "C:/Users/SexyManatee/Documents/GitHub/Rstat_projet"
+#wd = "D:/Documents/Etudes/ENS/M2/AS/AS_Cogmaster/R"
 
 w <- read.spss(paste(wd, "01-weights.sav", sep="/"), to.data.frame=TRUE)
 names(w)
@@ -129,9 +129,9 @@ print(part_explained, type = "html", include.rownames = FALSE)
 The part of the variance explained here is about 1.8%. 
 ### Assumptions
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>The sample includes less than 10% of the population and no obvious links are reported between the children. We can assume that the samples are independant.</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
 ```{r qqnorm_plot, results='asis'}
@@ -140,12 +140,12 @@ qqnorm(w$WEIGHT)
 It looks like a roughly linear function relates our sample distribution and the normal distribution, thus we can conclude that the sample distribution is approximately normal.
 
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
 ```{r}
 bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 ```
-According to what can be observed hereand the data constained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though "3 or more siblings" is slightly off.
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is relatively constant, though "3 or more siblings" is slightly off.
 
 <h1> Question 3 </h1>
 
@@ -172,22 +172,22 @@ print(part_explained_2,type = "html", include.rownames = FALSE)
 The part of the variance explained here is still about 1.8%.
 ### Assumptions
 <ul>
-**<li><p>Independance</p>**
+<li><p>Independance</p>
 <p>No changes in this assumption</p></li>
-**<li><p>Approximately normal</p>**
+<li><p>Approximately normal</p>
 <p>We need to compute a qqplot:</p></li>
 </ul>
-```{r qqnorm, results='asis'}
+```{r qqnorm, results='asis',fig.height=5, fig.width=5}
 qqnorm(w$WEIGHT)
 ```
 No changes in this assumption
 <ul>
-**<li>Constant variance</li>**
+<li>Constant variance</li>
 </ul>
-```{r}
+```{r boxplot_3levels, results='asis', fig.height=5, fig.width=5}
 bwplot(PARITY ~ WEIGHT, data = w, pch = "|")
 ```
-According to what can be observed here and the data constained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
+According to what can be observed here and the data contained in the tables of question 1, it seems that the width of the boxes for each group is fairly constant. The assumption of constant variance is slightly better respected after aggregating the last two categories.
 
 <h1> Question 4 </h1>
 
@@ -218,6 +218,8 @@ Value of t-tests for each correlation and associated p-values:
 corr.test(as.matrix(w[2:4],adjust="Bonferroni"))$t
 corr.test(as.matrix(w[2:4],adjust="Bonferroni"))$p
 ```
+The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.
+
 
 Correlations between baby weight, height, and head circumference, without Bonferroni correction:
 ```{r nonBonf_corr}
@@ -228,13 +230,13 @@ Value of t-tests for each correlation and associated p-values:
 corr.test(as.matrix(w[2:4],adjust="none"))$t
 corr.test(as.matrix(w[2:4],adjust="none"))$p
 ```
-
+The p values indicated here are rounded to zero because they are all well under 0.05. All t-tests significantly indicate correlation.
 
 ### Scatterplot matrix of pairwise relationships
 ```{r scatt_matrix}
 splom(~w[2:4])
 ```
-
+There seems to be a strong, positive correlation between all variables.
 <h1> Question 6 </h1>
 ### Relationship between body length and weight, with a loess smoother
 ```{r loess_smoother}
@@ -257,7 +259,7 @@ We will thus rely on this linear model for the rest of our analysis.
 
 ### Table of regression coefficients from the linear model
 ```{r regression_coeff}
-as.table(WL.lm$coefficients)
+print(xtable(as.table(WL.lm$coefficients), type = 'html', include.rownames=FALSE))
 ```
 
 ### 95% confidence intervals for the slope parameter
@@ -275,7 +277,7 @@ ss.dist <- sum(scale(w$WEIGHT, scale=FALSE)^2)
 ss.resid <- sum(resid(lw1)^2)
 1-ss.resid/ss.dist
 ```
-
+We have now quantified the strong positive correlation observed in the scatterplot between body length and weight.
 ### Weight prediction for a height of 56.8 cm
 ```{r weight_prediction}
 predict(WL.lm, data.frame(LENGTH = 56.8), interval = "confidence", level = 0.95)
